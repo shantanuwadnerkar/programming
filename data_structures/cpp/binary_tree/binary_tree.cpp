@@ -31,295 +31,228 @@ void print_vector(const std::vector<int>& vec)
 //     std::cout << '\n';
 // }
 
-
-struct BinaryTreeNode
+BinarySearchTree::BinarySearchTree(int val)
+    : m_root{new BinaryTreeNode{val}}
 {
-public:
-    // int data;
-    // BinaryTreeNode* left;
-    // BinaryTreeNode* right;
+}
 
-    BinaryTreeNode(int val, BinaryTreeNode* left, BinaryTreeNode* right)
-        : data{val}, left{left}, right{right}
-    {
-    }
-
-    // The below 2 constructors are delegated
-    BinaryTreeNode(int val)
-        : BinaryTreeNode(val, nullptr, nullptr)
-    {
-    }
-
-    BinaryTreeNode()
-        : BinaryTreeNode(0, nullptr, nullptr)
-    {
-    }
-
-    ~BinaryTreeNode()
-    {
-    }
-};
-
-
-class BinarySearchTree
+// initialize tree using a vector of elements
+BinarySearchTree::BinarySearchTree(std::vector<int> vec)
+    : m_root{new BinaryTreeNode{vec[0]}}
 {
-public:
-    BinarySearchTree(int val)
-        : m_root{new BinaryTreeNode{val}}
-    {
-    }
+    auto it = vec.cbegin();
+    it++;
 
-    // initialize tree using a vector of elements
-    BinarySearchTree(std::vector<int> vec)
-        : m_root{new BinaryTreeNode{vec[0]}}
+    while (it != vec.cend())
     {
-        auto it = vec.cbegin();
+        this->insert(*it);
         it++;
+    }
+}
 
-        while (it != vec.cend())
-        {
-            this->insert(*it);
-            it++;
-        }
+BinarySearchTree::~BinarySearchTree()
+{
+    delete_tree(m_root);
+}
+
+BinaryTreeNode* BinarySearchTree::get_root()
+{
+    return m_root;
+}
+
+void BinarySearchTree::inorder_print(BinaryTreeNode* node)
+{
+    if (node == nullptr)
+    {
+        return;
     }
 
-    ~BinarySearchTree()
+    inorder_print(node->left);
+    std::cout << node->data << " ";
+    inorder_print(node->right);
+}
+
+void BinarySearchTree::preorder_print(BinaryTreeNode* node)
+{
+    if (node == nullptr)
     {
-        delete_tree(m_root);
+        return;
     }
 
-    BinaryTreeNode* get_root()
+    std::cout << node->data << " ";
+    preorder_print(node->left);
+    preorder_print(node->right);
+}
+
+void BinarySearchTree::postorder_print(BinaryTreeNode* node)
+{
+    if (node == nullptr)
     {
-        return m_root;
+        return;
     }
 
-    void inorder_print(BinaryTreeNode* node)
+    postorder_print(node->left);
+    postorder_print(node->right);
+    std::cout << node->data << " ";
+}
+
+// std::vector<int> BinarySearchTree::inorder_traversal(BinaryTreeNode* node)
+// {
+//     if (node == nullptr)
+//     {
+//         return;
+//     }
+// }
+
+// std::vector<int> BinarySearchTree::preorder_traversal(BinaryTreeNode* node)
+// {
+//     if (node == nullptr)
+//     {
+//         return;
+//     }
+// }
+
+// std::vector<int> BinarySearchTree::postorder_traversal(BinaryTreeNode* node)
+// {
+//     if (node == nullptr)
+//     {
+//         return;
+//     }
+// }
+
+BinaryTreeNode* BinarySearchTree::insert(int val)
+{
+    return insert_recursive_helper(m_root, val);
+}
+
+// insert non-recursive
+BinaryTreeNode* BinarySearchTree::insertNR(int val)
+{
+    // return insert_recursive_helper(m_root, val);
+    // TO DO
+}
+
+bool BinarySearchTree::find(int target)
+{
+    return find_recursive_helper(m_root, target);
+}
+
+// find non-recursive
+bool BinarySearchTree::findNR(int val)
+{
+    BinaryTreeNode* runner{m_root};
+
+    while (true)
     {
-        if (node == nullptr)
-        {
-            return;
-        }
-
-        inorder_print(node->left);
-        std::cout << node->data << " ";
-        inorder_print(node->right);
-    }
-
-    void preorder_print(BinaryTreeNode* node)
-    {
-        if (node == nullptr)
-        {
-            return;
-        }
-
-        std::cout << node->data << " ";
-        preorder_print(node->left);
-        preorder_print(node->right);
-    }
-
-    void postorder_print(BinaryTreeNode* node)
-    {
-        if (node == nullptr)
-        {
-            return;
-        }
-
-        postorder_print(node->left);
-        postorder_print(node->right);
-        std::cout << node->data << " ";
-    }
-
-    // std::vector<int> inorder_traversal(BinaryTreeNode* node)
-    // {
-    //     if (node == nullptr)
-    //     {
-    //         return;
-    //     }
-    // }
-
-    // std::vector<int> preorder_traversal(BinaryTreeNode* node)
-    // {
-    //     if (node == nullptr)
-    //     {
-    //         return;
-    //     }
-    // }
-
-    // std::vector<int> postorder_traversal(BinaryTreeNode* node)
-    // {
-    //     if (node == nullptr)
-    //     {
-    //         return;
-    //     }
-    // }
-
-    BinaryTreeNode* insert(int val)
-    {
-        return insert_recursive_helper(m_root, val);
-    }
-
-    // insert non-recursive
-    BinaryTreeNode* insertNR(int val)
-    {
-        // return insert_recursive_helper(m_root, val);
-    }
-
-    bool find(int target)
-    {
-        return find_recursive_helper(m_root, target);
-    }
-
-    // find non-recursive
-    bool findNR(int val)
-    {
-        BinaryTreeNode* runner{m_root};
-
-        while (true)
-        {
-            if (runner == nullptr)
-            {
-                return false;
-            }
-            else if (runner->data == val)
-            {
-                return true;
-            }
-            else if (runner->data < val)
-            {
-                runner = runner->right;
-            }
-            else
-            {
-                runner = runner->left;
-            }
-        }
-    }
-
-    void print(std::string traversal = "inorder")
-    {
-        assert(traversal == "inorder" || traversal == "preorder" || traversal == "postorder" && "assert msg");
-        // convert to switch-case
-        if (traversal == "inorder")
-        {
-            std::cout << "Inorder traversal:\n";
-            inorder_print(m_root);
-            std::cout << '\n';
-        }
-        else if (traversal == "preorder")
-        {
-            std::cout << "Pre-order traversal:\n";
-            preorder_print(m_root);
-            std::cout << '\n';
-        }
-        else if (traversal == "postorder")
-        {
-            std::cout << "Post-order traversal:\n";
-            postorder_print(m_root);
-            std::cout << '\n';
-        }
-    }
-
-    void pretty_print()
-    {
-    }
-
-private:
-    BinaryTreeNode* m_root;
-
-    BinaryTreeNode* insert_recursive_helper(BinaryTreeNode* node, int val)
-    {
-        if (node == nullptr)
-        {
-            return new BinaryTreeNode{val};
-        }
-        else
-        {
-            if (node->data < val)
-            {
-                node->right = insert_recursive_helper(node->right, val);
-            }
-            else
-            {
-                node->left = insert_recursive_helper(node->left, val);
-            }
-            
-            return node;
-        }
-    }
-
-    bool find_recursive_helper(BinaryTreeNode* node, int target)
-    {
-        if (node == nullptr)
+        if (runner == nullptr)
         {
             return false;
         }
+        else if (runner->data == val)
+        {
+            return true;
+        }
+        else if (runner->data < val)
+        {
+            runner = runner->right;
+        }
         else
         {
-            if (node->data == target)
-            {
-                return true;
-            }
-            else if (node->data < target)
-            {
-                return find_recursive_helper(node->right, target);
-            }
-            else
-            {
-                return find_recursive_helper(node->left, target);
-            }
+            runner = runner->left;
         }
     }
+}
 
-    void delete_tree(BinaryTreeNode* node)
-    {
-        if (node == nullptr)
-        {
-            return;
-        }
-
-        delete_tree(node->left);
-        delete_tree(node->right);
-        delete node;
-    }
-};
-
-
-int main()
+void BinarySearchTree::print(std::string traversal)
 {
-    BinarySearchTree bst{5};
+    assert(traversal == "inorder" || traversal == "preorder" || traversal == "postorder" && "assert msg");
+    // convert to switch-case
+    if (traversal == "inorder")
+    {
+        std::cout << "Inorder traversal:\n";
+        inorder_print(m_root);
+        std::cout << '\n';
+    }
+    else if (traversal == "preorder")
+    {
+        std::cout << "Pre-order traversal:\n";
+        preorder_print(m_root);
+        std::cout << '\n';
+    }
+    else if (traversal == "postorder")
+    {
+        std::cout << "Post-order traversal:\n";
+        postorder_print(m_root);
+        std::cout << '\n';
+    }
+}
 
-    bst.insert(4);
-    bst.insert(4);
-    bst.insert(6);
-    bst.insert(3);
-    bst.insert(7);
+void BinarySearchTree::pretty_print()
+{
+}
 
-    // std::cout << bst.find(6) << '\n';
-    // std::cout << bst.find(9) << '\n';
-    // std::cout << bst.find(4) << '\n';
-    // std::cout << bst.find(3) << '\n';
-    // std::cout << bst.findNR(6) << '\n';
-    // std::cout << bst.findNR(9) << '\n';
-    // std::cout << bst.findNR(4) << '\n';
-    // std::cout << bst.findNR(3) << '\n';
-    bst.print();
-    // bst.print("inorder");
-    bst.print("preorder");
-    bst.print("postorder");
+BinaryTreeNode* BinarySearchTree::insert_recursive_helper(BinaryTreeNode* node, int val)
+{
+    if (node == nullptr)
+    {
+        return new BinaryTreeNode{val};
+    }
+    else
+    {
+        if (node->data < val)
+        {
+            node->right = insert_recursive_helper(node->right, val);
+        }
+        else
+        {
+            node->left = insert_recursive_helper(node->left, val);
+        }
+        
+        return node;
+    }
+}
 
-    std::cout << '\n';
+bool BinarySearchTree::find_recursive_helper(BinaryTreeNode* node, int target)
+{
+    if (node == nullptr)
+    {
+        return false;
+    }
+    else
+    {
+        if (node->data == target)
+        {
+            return true;
+        }
+        else if (node->data < target)
+        {
+            return BinarySearchTree::find_recursive_helper(node->right, target);
+        }
+        else
+        {
+            return BinarySearchTree::find_recursive_helper(node->left, target);
+        }
+    }
+}
 
-    BinarySearchTree bst_vec{{5, 4, 4, 6, 3, 7}};
-    bst_vec.print();
-    bst_vec.print("preorder");
-    bst_vec.print("postorder");
+void BinarySearchTree::delete_tree(BinaryTreeNode* node)
+{
+    if (node == nullptr)
+    {
+        return;
+    }
 
-    std::cout << '\n';
-    
-    std::vector<int> vec{5, 4, 4, 6, 3, 7};
-    BinarySearchTree bst_vec2{vec};
-    bst_vec2.print();
-    bst_vec2.print("preorder");
-    bst_vec2.print("postorder");
-    return 0;
+    delete_tree(node->left);
+    delete_tree(node->right);
+    delete node;
+}
+
+bool BinarySearchTree::isSame(BinaryTreeNode* p, BinaryTreeNode* q)
+{
+    if (p == nullptr || q == nullptr)
+    {
+        return (p == q);
+    }
+
+    return (p->data == q->data && isSame(p->left, q->left) && isSame(p->right, q->right));
 }
