@@ -5,8 +5,47 @@
 #include <cassert>
 #include <vector>
 
-#include "binary_tree_node.h"
 
+namespace bst
+{
+struct BinaryTreeNode
+{
+    int data;
+    BinaryTreeNode* left;
+    BinaryTreeNode* right;
+
+    BinaryTreeNode(int val, BinaryTreeNode* left, BinaryTreeNode* right)
+        : data{val}, left{left}, right{right}
+    {
+    }
+
+    BinaryTreeNode(int val)
+        : BinaryTreeNode(val, nullptr, nullptr)
+    {
+    }
+
+    BinaryTreeNode()
+        : BinaryTreeNode(0, nullptr, nullptr)
+    {
+    }
+
+    ~BinaryTreeNode()
+    {
+    }
+};
+
+
+// class MinimalBinarySearchTree
+// {
+// public:
+//     MinimalBinarySearchTree(int val);
+
+//     MinimalBinarySearchTree(std::vector<int>& vec);
+
+//     ~MinimalBinarySearchTree();
+
+// private:
+// };
 
 class BinarySearchTree
 {
@@ -152,3 +191,4 @@ private:
     void delete_tree(BinaryTreeNode* node);
 
 };
+} // namespace bst

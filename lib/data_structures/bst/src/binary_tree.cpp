@@ -1,4 +1,4 @@
-#include "binary_tree.h"
+#include <bst/binary_tree.h>
 
 
 // Source:
@@ -10,7 +10,8 @@
 // For more interesting details on assert.
 // https://en.cppreference.com/w/cpp/error/assert
 
-
+namespace bst
+{
 void print_vector(const std::vector<int>& vec)
 {
     for (int idx = 0; idx < vec.size(); idx++)
@@ -256,3 +257,4 @@ bool BinarySearchTree::isSame(BinaryTreeNode* p, BinaryTreeNode* q)
 
     return (p->data == q->data && isSame(p->left, q->left) && isSame(p->right, q->right));
 }
+} // namespace bst
