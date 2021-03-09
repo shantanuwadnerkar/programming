@@ -1,3 +1,8 @@
+// Source:
+// Merge Sort (inspired from):
+// https://leetcode.com/problems/sort-an-array/discuss/705134/python-merge-sort-easy-implementation
+// https://www.programiz.com/dsa/merge-sort
+
 #include <iostream>
 #include <vector>
 // design could be a sort function which can be included by other files.
